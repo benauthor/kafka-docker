@@ -1,14 +1,14 @@
 zookeeper:
   image: wurstmeister/zookeeper
-  ports: 
+  ports:
     - "2181"
 kafka:
   build: .
   ports:
     - "9092"
-  links: 
+  links:
     - zookeeper:zk
   environment:
-    KAFKA_ADVERTISED_HOST_NAME: 192.168.59.103
+    KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
