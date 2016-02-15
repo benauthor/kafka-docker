@@ -1,0 +1,8 @@
+FROM python:2.7
+
+RUN pip install pykafka==2.2.0
+RUN pip install ipython
+
+ADD pykafka-producer.py /opt/pykafka-producer.py
+
+CMD ["python", "/opt/pykafka-producer.py"]

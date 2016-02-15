@@ -11,6 +11,7 @@ kafka9-final:
     - zookeeper:zk
   environment:
     KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
+    KAFKA_CREATE_TOPICS: "test.topic:4:1"
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
 kafka9-intermediate:
@@ -34,3 +35,17 @@ kafka8:
     KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+pykafka-shell:
+  build: .
+  dockerfile: Dockerfile-pykafka
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
+  links:
+    - kafka9-final:kafka
+pykafka-producer:
+  build: .
+  dockerfile: Dockerfile-pykafka-producer
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
+  links:
+    - kafka9-final:kafka

@@ -1,0 +1,6 @@
+FROM python:2.7
+
+RUN pip install pykafka==2.2.0
+RUN pip install ipython
+
+CMD ["ipython"]
