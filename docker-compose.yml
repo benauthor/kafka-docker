@@ -2,9 +2,9 @@ zookeeper:
   image: wurstmeister/zookeeper
   ports:
     - "2181"
-kafka9:
+kafka9-final:
   build: .
-  dockerfile: Dockerfile-kafka9
+  dockerfile: Dockerfile-kafka9-final
   ports:
     - "9092"
   links:
@@ -13,14 +13,24 @@ kafka9:
     KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-# kafka8:
-#   build: .
-#   dockerfile: Dockerfile-kafka8
-#   ports:
-#     - "9092"
-#   links:
-#     - zookeeper:zk
-#   environment:
-#     KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
-#   volumes:
-#     - /var/run/docker.sock:/var/run/docker.sock
+kafka9-intermediate:
+  build: .
+  dockerfile: Dockerfile-kafka9-intermediate
+  ports:
+    - "9092"
+  links:
+    - zookeeper:zk
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+kafka8:
+  image: wurstmeister/kafka:0.8.2.1
+  ports:
+    - "9092"
+  links:
+    - zookeeper:zk
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
