@@ -1,0 +1,7 @@
+FROM python:2.7
+
+RUN pip install pykafka==2.2.0
+
+ADD pykafka-consumer.py /opt/pykafka-consumer.py
+
+CMD ["python", "/opt/pykafka-consumer.py"]

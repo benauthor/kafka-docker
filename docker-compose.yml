@@ -2,9 +2,8 @@ zookeeper:
   image: wurstmeister/zookeeper
   ports:
     - "2181"
-kafka9-final:
-  build: .
-  dockerfile: Dockerfile-kafka9-final
+kafka:
+  image: wurstmeister/kafka:0.9.0.0
   ports:
     - "9092"
   links:
@@ -14,38 +13,27 @@ kafka9-final:
     KAFKA_CREATE_TOPICS: "test.topic:4:1"
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-kafka9-intermediate:
-  build: .
-  dockerfile: Dockerfile-kafka9-intermediate
-  ports:
-    - "9092"
-  links:
-    - zookeeper:zk
-  environment:
-    KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-kafka8:
-  image: wurstmeister/kafka:0.8.2.1
-  ports:
-    - "9092"
-  links:
-    - zookeeper:zk
-  environment:
-    KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
 pykafka-shell:
   build: .
   dockerfile: Dockerfile-pykafka
   environment:
     KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
   links:
-    - kafka9-final:kafka
+    - kafka
+    - zookeeper
 pykafka-producer:
   build: .
   dockerfile: Dockerfile-pykafka-producer
   environment:
     KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
   links:
-    - kafka9-final:kafka
+    - kafka
+    - zookeeper
+pykafka-consumer:
+  build: .
+  dockerfile: Dockerfile-pykafka-consumer
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_IP}
+  links:
+    - kafka
+    - zookeeper
